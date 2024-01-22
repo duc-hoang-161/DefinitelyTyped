@@ -959,6 +959,77 @@ declare namespace Shippo {
 
     type Token = string | TokenOptions;
 
+  interface LineItem {
+    currency: string;
+    manufacture_country: string;
+    max_delivery_time?: string;
+    max_ship_time?: string;
+    quantity: number;
+    sku: string;
+    title: string;
+    total_price: string;
+    variant_title: string;
+    weight: string;
+    weight_unit: MassUnit;
+    object_id?: string;
+  }
+
+  interface CreateOrderRequest {
+    currency?: string;
+    notes?: string;
+    order_number?: string;
+    order_status?: 'UNKNOWN' | 'AWAITPAY' | 'PAID' | 'REFUNDED' | 'PARTIALLY_FULFILLED' | 'SHIPPED';
+    placed_at: string;
+    shipping_cost?: string;
+    shipping_cost_currency?: string;
+    shipping_method?: string;
+    subtotal_price?: string;
+    total_price?: string;
+    total_tax?: string;
+    weight?: string;
+    weight_unit?: MassUnit;
+    from_address: CreateAddressRequest;
+    to_address: CreateAddressRequest;
+    line_items: LineItem[];
+  }
+
+  interface Order {
+    currency?: string;
+    notes?: string;
+    order_number?: string;
+    order_status?: 'UNKNOWN' | 'AWAITPAY' | 'PAID' | 'REFUNDED' | 'PARTIALLY_FULFILLED' | 'SHIPPED';
+    placed_at: string;
+    shipping_cost?: string;
+    shipping_cost_currency?: string;
+    shipping_method?: string;
+    subtotal_price?: string;
+    total_price?: string;
+    total_tax?: string;
+    weight?: string;
+    weight_unit?: MassUnit;
+    from_address: Address;
+    to_address: Address;
+    line_items: LineItem[];
+    object_id: string;
+    object_owner: string;
+    shop_app:
+      | 'Amazon'
+      | 'Bigcommerce'
+      | 'CSV_Import'
+      | 'eBay'
+      | 'ePages'
+      | 'Etsy'
+      | 'Godaddy'
+      | 'Magento'
+      | 'Shippo'
+      | 'Shopify'
+      | 'Spreecommerce'
+      | 'StripeRelay'
+      | 'Weebly'
+      | 'WooCommerce';
+    transactions: string[];
+  }
+
     interface ShippoBase {
         setAuthScheme: (auth: string) => void;
         setHost: (host: string, port?: string, protocol?: string) => void;
@@ -1029,6 +1100,9 @@ declare namespace Shippo {
         track: {
             create: (request: RegisterTrackRequest) => Promise<Track>;
             get_status: (carrier: Carriers, trackingNumber: string) => Promise<Track>;
+        };
+        order: {
+            create: (request: CreateOrderRequest) => Promise<Order>;
         };
     }
 }
